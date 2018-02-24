@@ -5,8 +5,8 @@ Maven artifact:
 
 ```xml
 <dependency>
-    <groupId>org.gteng</groupId>
+    <groupId>tech.iooo.coco</groupId>
     <artifactId>vertx-fastdfs-client</artifactId>
-    <version>3.5.0.1</version>
+    <version>1.0.0.RELEASE</version>
 </dependency>
 ```
