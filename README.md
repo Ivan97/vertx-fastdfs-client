@@ -10,6 +10,6 @@ Maven artifact:
 <dependency>
     <groupId>tech.iooo.coco</groupId>
     <artifactId>vertx-fastdfs-client</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>${project.version}</version>
 </dependency>
 ```
