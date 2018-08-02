@@ -10,11 +10,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * This object controls the connection setting to the FastDFS Server. There is no need to specify
- * most of the settings since it has built the following sensible defaults: <p> * `charset`: `UTF-8`
- * * `connectTimeout`: 10000 * `networkTimeout`: 10000 * `poolSize`: 15 * `trackers` : [ * ] <p>
+ * This object controls the connection setting to the FastDFS Server. There is no need to specify most of the settings
+ * since it has built the following sensible defaults:
+ * <p>
+ * * `charset`: `UTF-8` * `connectTimeout`: 10000 * `networkTimeout`: 10000 * `poolSize`: 15 * `trackers` : [ * ]
+ * <p>
  *
- * @author GengTeng <p> me@gteng.org
+ * @author GengTeng
+ * <p>
+ * me@gteng.org
  * @version 3.5.0
  */
 public class FdfsClientOptions extends AbstractFdfsOptions {
@@ -29,11 +33,9 @@ public class FdfsClientOptions extends AbstractFdfsOptions {
       .put(FdfsClientOptions.CONNECT_TIMEOUT, FdfsClientOptions.DEFAULT_CONNECT_TIMEOUT)
       .put(FdfsClientOptions.NETWORK_TIMEOUT, FdfsClientOptions.DEFAULT_NETWORK_TIMEOUT)
       .put(FdfsClientOptions.POOLSIZE, FdfsClientOptions.DEFAULT_POOLSIZE)
-      .put(FdfsClientOptions.DEFAULT_EXT, FdfsClientOptions.DEFAULT_DEFAULT_EXT)
-      .put(FdfsClientOptions.TRACKERS,
-          new JsonArray()
-              .add(new JsonObject().put(FdfsClientOptions.HOST, FdfsClientOptions.DEFAULT_HOST)
-                  .put(FdfsClientOptions.PORT, FdfsClientOptions.DEFAULT_PORT)));
+      .put(FdfsClientOptions.DEFAULT_EXT, FdfsClientOptions.DEFAULT_DEFAULT_EXT).put(FdfsClientOptions.TRACKERS,
+          new JsonArray().add(new JsonObject().put(FdfsClientOptions.HOST, FdfsClientOptions.DEFAULT_HOST)
+              .put(FdfsClientOptions.PORT, FdfsClientOptions.DEFAULT_PORT)));
   private List<SocketAddress> trackers;
 
   /**
@@ -42,6 +44,17 @@ public class FdfsClientOptions extends AbstractFdfsOptions {
   public FdfsClientOptions() {
     super();
     trackers = new ArrayList<>();
+  }
+
+  /**
+   * Constructor using a {@code JsonObject}
+   *
+   * @param json the {@code JsonObject}
+   */
+  public FdfsClientOptions(JsonObject json) {
+    this();
+
+    fromJson(json);
   }
 
   /**
