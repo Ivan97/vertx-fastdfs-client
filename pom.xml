@@ -6,18 +6,16 @@
   <parent>
     <groupId>tech.iooo.boot</groupId>
     <artifactId>iooo-boot-parent</artifactId>
-    <version>1.0.5.RELEASE</version>
+    <version>1.1.8-SNAPSHOT</version>
   </parent>
 
   <groupId>tech.iooo.coco</groupId>
   <artifactId>vertx-fastdfs-client</artifactId>
-  <version>1.0.2.RELEASE</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>vertx-fastdfs-client</name>
-  <description>The Vert.x FastDFS client provides an asynchronous API to interact with a FastDFS
-    server.
-  </description>
+  <description>The Vert.x FastDFS client provides an asynchronous API to interact with a FastDFS server.</description>
   <url>https://blog.iooo.tech</url>
 
   <licenses>
@@ -40,8 +38,7 @@
 
   <scm>
     <connection>scm:git:git@github.com:Ivan97/vertx-fastdfs-client.git</connection>
-    <developerConnection>scm:git:git@github.com:Ivan97/vertx-fastdfs-client.git
-    </developerConnection>
+    <developerConnection>scm:git:git@github.com:Ivan97/vertx-fastdfs-client.git</developerConnection>
     <url>git@github.com:Ivan97/vertx-fastdfs-client.git</url>
   </scm>
 
@@ -83,4 +80,18 @@
       </plugin>
     </plugins>
   </build>
+
+  <repositories>
+    <repository>
+      <id>oss</id>
+      <name>oss</name>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>
