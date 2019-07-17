@@ -123,9 +123,7 @@ public class FdfsConnection implements ReadStream<Buffer>, WriteStream<Buffer> {
     if (this.state.compareAndSet(State.DISCONNECTED, State.CONNECTING)) {
       client.connect(address, ar -> {
         if (ar.succeeded()) {
-          this.socket = ar.result().closeHandler(v -> {
-            this.state.set(State.DISCONNECTED);
-          });
+          this.socket = ar.result().closeHandler(v -> this.state.set(State.DISCONNECTED));
 
           this.state.set(State.CONNECTED);
 
@@ -173,8 +171,20 @@ public class FdfsConnection implements ReadStream<Buffer>, WriteStream<Buffer> {
   }
 
   @Override
+  public ReadStream<Buffer> fetch(long amount) {
+    socket.fetch(amount);
+    return this;
+  }
+
+  @Override
   public FdfsConnection write(Buffer data) {
     socket.write(data);
+    return this;
+  }
+
+  @Override
+  public WriteStream<Buffer> write(Buffer data, Handler<AsyncResult<Void>> handler) {
+    socket.write(data, handler);
     return this;
   }
 
@@ -227,12 +237,25 @@ public class FdfsConnection implements ReadStream<Buffer>, WriteStream<Buffer> {
     close();
   }
 
+  @Override
+  public void end(Handler<AsyncResult<Void>> handler) {
+    close(handler);
+  }
+
   /**
    * Close the NetSocket
    */
   public void close() {
     this.state.set(State.DISCONNECTED);
     socket.close();
+  }
+
+  /**
+   * Close the NetSocket
+   */
+  public void close(Handler<AsyncResult<Void>> handler) {
+    this.state.set(State.DISCONNECTED);
+    socket.close(handler);
   }
 
   /**
@@ -291,6 +314,6 @@ public class FdfsConnection implements ReadStream<Buffer>, WriteStream<Buffer> {
     /**
      * Reserved.
      */
-    RESERVED;
+    RESERVED
   }
 }

@@ -56,8 +56,7 @@ public class FdfsTrackerImpl implements FdfsTracker {
         Buffer groupBuffer = hasGroup ? Buffer.buffer(group, options.getCharset()) : null;
 
         if (hasGroup && groupBuffer.length() > FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN) {
-          handler.handle(
-              Future.failedFuture(new FdfsException("group name [" + group + "] is too long")));
+          handler.handle(Future.failedFuture(new FdfsException("group name [" + group + "] is too long")));
           return;
         }
 
@@ -107,16 +106,13 @@ public class FdfsTrackerImpl implements FdfsTracker {
 
   @Override
   public FdfsTracker getFetchStorage(FdfsFileId fileId, Handler<AsyncResult<FdfsStorage>> handler) {
-    getFetchOrUpdateStorage(FdfsProtocol.TRACKER_PROTO_CMD_SERVICE_QUERY_FETCH_ONE, fileId)
-        .setHandler(handler);
+    getFetchOrUpdateStorage(FdfsProtocol.TRACKER_PROTO_CMD_SERVICE_QUERY_FETCH_ONE, fileId).setHandler(handler);
     return this;
   }
 
   @Override
-  public FdfsTracker getUpdateStorage(FdfsFileId fileId,
-      Handler<AsyncResult<FdfsStorage>> handler) {
-    getFetchOrUpdateStorage(FdfsProtocol.TRACKER_PROTO_CMD_SERVICE_QUERY_UPDATE, fileId)
-        .setHandler(handler);
+  public FdfsTracker getUpdateStorage(FdfsFileId fileId, Handler<AsyncResult<FdfsStorage>> handler) {
+    getFetchOrUpdateStorage(FdfsProtocol.TRACKER_PROTO_CMD_SERVICE_QUERY_UPDATE, fileId).setHandler(handler);
     return this;
   }
 
@@ -127,20 +123,16 @@ public class FdfsTrackerImpl implements FdfsTracker {
       if (conn.succeeded()) {
         FdfsConnection connection = conn.result();
 
-        Buffer headerBuffer = FdfsProtocol
-            .packHeader(FdfsProtocol.TRACKER_PROTO_CMD_SERVER_LIST_GROUP,
-                (byte) 0, 0);
+        Buffer headerBuffer = FdfsProtocol.packHeader(FdfsProtocol.TRACKER_PROTO_CMD_SERVER_LIST_GROUP, (byte) 0, 0);
 
-        FdfsProtocol.recvPacket(vertx, options.getNetworkTimeout(), connection,
-            FdfsProtocol.TRACKER_PROTO_CMD_RESP, 0, null).setHandler(recv -> {
+        FdfsProtocol.recvPacket(vertx, options.getNetworkTimeout(), connection, FdfsProtocol.TRACKER_PROTO_CMD_RESP, 0, null).setHandler(recv -> {
           connection.release();
 
           if (recv.succeeded()) {
             FdfsPacket packet = recv.result();
             Buffer bodyBuffer = packet.getBodyBuffer();
             if (bodyBuffer.length() % FdfsGroupInfo.BYTES != 0) {
-              handler.handle(Future.failedFuture(new FdfsException(
-                  "byte array length: " + bodyBuffer.length() + " is invalid")));
+              handler.handle(Future.failedFuture(new FdfsException("byte array length: " + bodyBuffer.length() + " is invalid")));
               return;
             }
 
@@ -152,32 +144,18 @@ public class FdfsTrackerImpl implements FdfsTracker {
               int offset = FdfsGroupInfo.BYTES * i;
               FdfsGroupInfo groupInfo = new FdfsGroupInfo();
 
-              groupInfo.setName(FdfsUtils.fdfsTrim(bodyBuffer.getString(offset,
-                  offset + FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN, charset)));
+              groupInfo.setName(FdfsUtils.fdfsTrim(bodyBuffer.getString(offset, offset + FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN, charset)));
               groupInfo.setTotalMB(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1));
-              groupInfo.setFreeMB(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1
-                  + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 1));
-              groupInfo.setTrunkFreeMB(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1
-                  + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 2));
-              groupInfo.setStorageCount(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN
-                  + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 3));
-              groupInfo.setStoragePort(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1
-                  + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 4));
-              groupInfo.setStorageHttpPort(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN
-                  + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 5));
-              groupInfo.setActiveCount(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1
-                  + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 6));
-              groupInfo.setCurrentWriteServer(
-                  bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1
-                      + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 7));
-              groupInfo.setStorePathCount(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN
-                  + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 8));
-              groupInfo.setSubdirCountPerPath(
-                  bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1
-                      + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 9));
-              groupInfo.setCurrentTrunkFileId(
-                  bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1
-                      + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 10));
+              groupInfo.setFreeMB(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 1));
+              groupInfo.setTrunkFreeMB(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 2));
+              groupInfo.setStorageCount(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 3));
+              groupInfo.setStoragePort(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 4));
+              groupInfo.setStorageHttpPort(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 5));
+              groupInfo.setActiveCount(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 6));
+              groupInfo.setCurrentWriteServer(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 7));
+              groupInfo.setStorePathCount(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 8));
+              groupInfo.setSubdirCountPerPath(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 9));
+              groupInfo.setCurrentTrunkFileId(bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + 1 + FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE * 10));
 
               list.add(groupInfo);
             }
@@ -211,22 +189,18 @@ public class FdfsTrackerImpl implements FdfsTracker {
         FdfsConnection connection = conn.result();
 
         final long bodyLength = FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN;
-        Buffer headerBuffer = FdfsProtocol
-            .packHeader(FdfsProtocol.TRACKER_PROTO_CMD_SERVER_LIST_STORAGE,
-                (byte) 0, bodyLength);
+        Buffer headerBuffer = FdfsProtocol.packHeader(FdfsProtocol.TRACKER_PROTO_CMD_SERVER_LIST_STORAGE, (byte) 0, bodyLength);
         Buffer bodyBuffer = FdfsUtils.newZero(bodyLength);
         bodyBuffer.setBuffer(0, Buffer.buffer(group, options.getCharset()));
 
-        FdfsProtocol.recvPacket(vertx, options.getNetworkTimeout(), connection,
-            FdfsProtocol.TRACKER_PROTO_CMD_RESP, 0, null).setHandler(ar -> {
+        FdfsProtocol.recvPacket(vertx, options.getNetworkTimeout(), connection, FdfsProtocol.TRACKER_PROTO_CMD_RESP, 0, null).setHandler(ar -> {
           connection.release();
 
           if (ar.succeeded()) {
             FdfsPacket res = ar.result();
             Buffer resBodyBuffer = res.getBodyBuffer();
             if (resBodyBuffer.length() % FdfsStorageInfo.BYTES != 0) {
-              handler.handle(Future.failedFuture(new FdfsException(
-                  "byte array length: " + resBodyBuffer.length() + " is invalid")));
+              handler.handle(Future.failedFuture(new FdfsException("byte array length: " + resBodyBuffer.length() + " is invalid")));
               return;
             }
 
@@ -240,17 +214,13 @@ public class FdfsTrackerImpl implements FdfsTracker {
 
               storageInfo.setStatus(resBodyBuffer.getByte(offset));
               offset += 1;
-              storageInfo.setIp(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset,
-                  offset + FdfsProtocol.FDFS_IPADDR_SIZE, charset)));
+              storageInfo.setIp(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset, offset + FdfsProtocol.FDFS_IPADDR_SIZE, charset)));
               offset += FdfsProtocol.FDFS_IPADDR_SIZE;
-              storageInfo.setDomainName(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset,
-                  offset + FdfsProtocol.FDFS_DOMAIN_NAME_MAX_SIZE, charset)));
+              storageInfo.setDomainName(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset, offset + FdfsProtocol.FDFS_DOMAIN_NAME_MAX_SIZE, charset)));
               offset += FdfsProtocol.FDFS_DOMAIN_NAME_MAX_SIZE;
-              storageInfo.setSourceIp(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset,
-                  offset + FdfsProtocol.FDFS_IPADDR_SIZE, charset)));
+              storageInfo.setSourceIp(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset, offset + FdfsProtocol.FDFS_IPADDR_SIZE, charset)));
               offset += FdfsProtocol.FDFS_IPADDR_SIZE;
-              storageInfo.setVersion(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset,
-                  offset + FdfsProtocol.FDFS_VERSION_SIZE, charset)));
+              storageInfo.setVersion(FdfsUtils.fdfsTrim(resBodyBuffer.getString(offset, offset + FdfsProtocol.FDFS_VERSION_SIZE, charset)));
               offset += FdfsProtocol.FDFS_VERSION_SIZE;
               storageInfo.setJoinTime(Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
               offset += FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE;
@@ -354,16 +324,13 @@ public class FdfsTrackerImpl implements FdfsTracker {
               offset += FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE;
               storageInfo.setSuccessFileWriteCount(resBodyBuffer.getLong(offset));
               offset += FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE;
-              storageInfo
-                  .setLastSourceUpdate(Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
+              storageInfo.setLastSourceUpdate(Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
               offset += FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE;
               storageInfo.setLastSyncUpdate(Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
               offset += FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE;
-              storageInfo.setLastSyncedTimestamp(
-                  Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
+              storageInfo.setLastSyncedTimestamp(Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
               offset += FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE;
-              storageInfo
-                  .setLastHeartBeatTime(Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
+              storageInfo.setLastHeartBeatTime(Instant.ofEpochSecond(resBodyBuffer.getLong(offset)));
               offset += FdfsProtocol.FDFS_PROTO_PKG_LEN_SIZE;
               storageInfo.setTrunkServer(resBodyBuffer.getByte(offset) != (byte) 0);
 
@@ -381,9 +348,7 @@ public class FdfsTrackerImpl implements FdfsTracker {
 
         if (connection.writeQueueFull()) {
           connection.pause();
-          connection.drainHandler(v -> {
-            connection.resume();
-          });
+          connection.drainHandler(v -> connection.resume());
         }
       } else {
         handler.handle(Future.failedFuture(conn.cause()));
@@ -393,19 +358,13 @@ public class FdfsTrackerImpl implements FdfsTracker {
     return this;
   }
 
-  private Future<FdfsStorageOptions> parseStorage(Buffer bodyBuffer, String charset,
-      boolean hasPathIndex) {
+  private Future<FdfsStorageOptions> parseStorage(Buffer bodyBuffer, String charset, boolean hasPathIndex) {
     try {
       FdfsStorageOptions storageOptions = new FdfsStorageOptions(options);
 
-      String group = FdfsUtils
-          .fdfsTrim(
-              bodyBuffer.getString(0, FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN, options.getCharset()));
-      String ip = FdfsUtils.fdfsTrim(bodyBuffer.getString(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN,
-          FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + FdfsProtocol.FDFS_IPADDR_SIZE - 1,
-          options.getCharset()));
-      long port = bodyBuffer
-          .getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + FdfsProtocol.FDFS_IPADDR_SIZE - 1);
+      String group = FdfsUtils.fdfsTrim(bodyBuffer.getString(0, FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN, options.getCharset()));
+      String ip = FdfsUtils.fdfsTrim(bodyBuffer.getString(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN, FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + FdfsProtocol.FDFS_IPADDR_SIZE - 1, options.getCharset()));
+      long port = bodyBuffer.getLong(FdfsProtocol.FDFS_GROUP_NAME_MAX_LEN + FdfsProtocol.FDFS_IPADDR_SIZE - 1);
 
       storageOptions.setGroup(group).setAddress(SocketAddress.inetSocketAddress((int) port, ip));
 
@@ -449,9 +408,7 @@ public class FdfsTrackerImpl implements FdfsTracker {
         connection.write(packet);
         if (connection.writeQueueFull()) {
           connection.pause();
-          connection.drainHandler(v -> {
-            connection.resume();
-          });
+          connection.drainHandler(v -> connection.resume());
         }
       } else {
         futureFdfsStorage.fail(conn.cause());

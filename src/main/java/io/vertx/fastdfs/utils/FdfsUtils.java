@@ -19,8 +19,8 @@ public final class FdfsUtils {
 
   public static void printBytes(String flag, byte[] bytes) {
     System.out.println("------------" + flag + "=" + bytes.length + "------------");
-    for (int i = 0; i < bytes.length; ++i) {
-      System.out.print(bytes[i] + " ");
+    for (byte aByte : bytes) {
+      System.out.print(aByte + " ");
     }
     System.out.println("\n------------" + flag + "=" + bytes.length + "------------");
   }

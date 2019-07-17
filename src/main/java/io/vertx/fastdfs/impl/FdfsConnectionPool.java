@@ -30,8 +30,7 @@ public class FdfsConnectionPool implements Shareable {
 
   private ConcurrentMap<SocketAddress, CircularConnectionPool> pools;
 
-  public FdfsConnectionPool(Vertx vertx, NetClientOptions options, int poolSize,
-      LocalMap<String, FdfsConnectionPool> map, String poolName) {
+  public FdfsConnectionPool(Vertx vertx, NetClientOptions options, int poolSize, LocalMap<String, FdfsConnectionPool> map, String poolName) {
     this.vertx = vertx;
     this.client = vertx.createNetClient(options);
     this.poolSize = poolSize;

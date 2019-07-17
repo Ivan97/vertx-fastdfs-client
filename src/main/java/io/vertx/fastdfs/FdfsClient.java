@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 public interface FdfsClient {
 
-  public static String DEFAULT_POOL_NAME = "FASTDFS_DEFAULT_POOL";
+  String DEFAULT_POOL_NAME = "FASTDFS_DEFAULT_POOL";
 
   /**
    * Create a FastDFS client using the provided {@code vertx} instance.
@@ -29,7 +29,7 @@ public interface FdfsClient {
    * @param options the FastDFS Client options
    * @return the created FastDFS client
    */
-  public static FdfsClient createShared(Vertx vertx, FdfsClientOptions options) {
+  static FdfsClient createShared(Vertx vertx, FdfsClientOptions options) {
     return new FdfsClientImpl(vertx, options, DEFAULT_POOL_NAME);
   }
 
@@ -41,7 +41,7 @@ public interface FdfsClient {
    * @param poolName the shared pool name
    * @return the created FastDFS client
    */
-  public static FdfsClient createShared(Vertx vertx, FdfsClientOptions options, String poolName) {
+  static FdfsClient createShared(Vertx vertx, FdfsClientOptions options, String poolName) {
     return new FdfsClientImpl(vertx, options, poolName);
   }
 
@@ -52,7 +52,7 @@ public interface FdfsClient {
    * @param options the FastDFS Client options
    * @return the created FastDFS client
    */
-  public static FdfsClient createNonShared(Vertx vertx, FdfsClientOptions options) {
+  static FdfsClient createNonShared(Vertx vertx, FdfsClientOptions options) {
     return new FdfsClientImpl(vertx, options, UUID.randomUUID().toString());
   }
 
@@ -63,7 +63,7 @@ public interface FdfsClient {
    * @param options the FastDFS Client options
    * @return the created FastDFS client
    */
-  public static FdfsClient createShared(Vertx vertx, JsonObject options) {
+  static FdfsClient createShared(Vertx vertx, JsonObject options) {
     return new FdfsClientImpl(vertx, options, DEFAULT_POOL_NAME);
   }
 
@@ -75,7 +75,7 @@ public interface FdfsClient {
    * @param poolName the shared pool name
    * @return the created FastDFS client
    */
-  public static FdfsClient createShared(Vertx vertx, JsonObject options, String poolName) {
+  static FdfsClient createShared(Vertx vertx, JsonObject options, String poolName) {
     return new FdfsClientImpl(vertx, options, poolName);
   }
 
@@ -86,7 +86,7 @@ public interface FdfsClient {
    * @param options the FastDFS Client options
    * @return the created FastDFS client
    */
-  public static FdfsClient createNonShared(Vertx vertx, JsonObject options) {
+  static FdfsClient createNonShared(Vertx vertx, JsonObject options) {
     return new FdfsClientImpl(vertx, options, UUID.randomUUID().toString());
   }
 
